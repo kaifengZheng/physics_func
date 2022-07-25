@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1608193415 source:c:\users\17608\desktop\sbu\esm511\project\mc\main.cpp
+	<iostream>
+	<fstream>
+	<cmath>
+

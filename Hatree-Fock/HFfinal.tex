@@ -1,0 +1,1218 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{HFfinal}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{scf-hartree-fock}{%
+\section{SCF-Hartree-Fock}\label{scf-hartree-fock}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}      
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{misc} \PY{k+kn}{import} \PY{n}{derivative}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate} \PY{k+kn}{import} \PY{n}{quad}\PY{p}{,}\PY{n}{dblquad}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{create-basis_fun-basis_fun2-and-wave_fun}{%
+\subsection{1. create basis\_fun, basis\_fun2 and
+wave\_fun}\label{create-basis_fun-basis_fun2-and-wave_fun}}
+
+\textbf{basis\_fun(x,n)}: create the basis function \(\chi\)
+\begin{align}
+    \chi_\nu = (\frac{2\zeta_\nu}{\pi})^{1/4}e^{-\zeta_\nu}x^2\\
+\zeta_\nu=\frac{2}{2\nu-1}
+\end{align} where nu is a index in 1\textless{}\(\nu\)\textless k. In
+the program: - n:\(\nu\) \textbf{basis\_fun2(x,a,b)}: a function to
+calculate square of basis
+function:\((\frac{2\zeta_\mu}{\pi})^{1/4}e^{-\zeta_\mu}x^2*(\frac{2\zeta_\nu}{\pi})^{1/4}e^{-\zeta_\nu}x^2\)
+- a:\(\mu\) - b:\(\nu\) **wave\_fun*(x,c)**: calculate the ground state
+wave function. \begin{equation}
+    \psi=\sum^K_{\nu=1}c_\nu\chi_\nu
+\end{equation} - c: a list of coefficients(\(c_\nu\))
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{n}{zeta} \PY{o}{=} \PY{l+m+mf}{2.0}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{2.0}\PY{o}{*}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{}x = x.reshape((len(x),1))}
+    \PY{c+c1}{\PYZsh{}zeta = zeta.reshape((1,len(zeta)))}
+    \PY{n}{chi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{p}{(}\PY{l+m+mf}{2.0}\PY{o}{*}\PY{n}{zeta}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{chi}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}
+
+
+\PY{k}{def} \PY{n+nf}{basis\PYZus{}fun2}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{a}\PY{p}{)}\PY{o}{*}\PY{n}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{wave\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    return: the total wave function }
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{tot\PYZus{}basiswave}\PY{o}{=}\PY{l+m+mi}{0}
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{tot\PYZus{}basiswave} \PY{o}{+}\PY{o}{=}\PY{n}{c}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{*}\PY{n}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{c+c1}{\PYZsh{}rows are mu/nu columns are x\PYZus{}value}
+    \PY{c+c1}{\PYZsh{}print(tot\PYZus{}basiswave)}
+    \PY{k}{return} \PY{n}{tot\PYZus{}basiswave} \PY{c+c1}{\PYZsh{}every element in wave function: tot\PYZus{}basiswave, }
+
+\PY{k}{def} \PY{n+nf}{normalizationF}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    normalization factor}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{def} \PY{n+nf}{wave\PYZus{}fun2}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{wave\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{n}{wave\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+    \PY{k}{return} \PY{l+m+mf}{1.0}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{quad}\PY{p}{(}\PY{n}{wave\PYZus{}fun2}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{p}{(}\PY{n}{c}\PY{p}{,}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{n}{epsrel}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{calculate-sfh-matrix}{%
+\subsection{2. calculate S,F,h matrix}\label{calculate-sfh-matrix}}
+
+\textbf{S(n)} is the overlap matrix, and the matrix elements can be
+written as: \begin{equation}
+<\chi_\mu|\chi_\nu>=\int dx_1\chi_\mu(1)\chi_\nu(1)
+\end{equation} - n: the number of terms in the ground state wave
+function (equal to K). \textbf{J(a,b,c,q=1)} is the columb matrix, and
+the matrix elements are: \begin{align}
+<\chi_\mu(1)|\hat{J}_0(1)|\chi_\nu(1)>=
+\int\int dx_1dx_2 \chi_\mu(1)\chi_\nu(1)|\psi_0(2)|^2\frac{q^2}{|x_1-x_2|+\epsilon}
+\end{align} where, - a,b indecates \(\mu\) and \(\nu\) - c contains
+coefficents \(c_\nu\) \textbf{h(a,b)} is the matrix element for kinetic
+and HO potential energy: \begin{equation}
+<\chi_\mu|K+V|\chi_\nu>=\int dx_1\chi_\mu(1)(-\frac{1}{2}\nabla^2+\frac{1}{2}x_1^2)\chi_\nu(1)
+\end{equation} where, - a,b indecates \(\mu\) and \(\nu\) - n: the
+number of terms in the ground state wave function (equal to K).
+\textbf{F(a,b)} is Fock matrix. \begin{equation}
+F_{\mu\nu}=<\chi_\mu(1)|\hat{F}(1)|\chi_\nu(1)>=<\chi_\mu(1)|\hat{h}(1)|\chi_\nu(1)>+<\chi_\mu(1)|\hat{J}_0(1)|\chi_\nu(1)>
+\end{equation} - a,b indecates \(\mu\) and \(\nu\) \textbf{E(n,c,q=1)}
+is the energy corresponding to the \(\psi\). \begin{equation}
+E = c^\dagger F c+c^\dagger h c
+\end{equation} - n: the number of terms in the ground state wave
+function (equal to K). - c contains coefficents \(c_\nu\)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{S}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{}fun:basis\PYZus{}fun2}
+    \PY{n}{S\PYZus{}matrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Sint}\PY{o}{=}\PY{n}{quad}\PY{p}{(}\PY{n}{basis\PYZus{}fun2}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{epsrel}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{)}
+            \PY{n}{S\PYZus{}matrix}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{Sint}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+   \PY{c+c1}{\PYZsh{}         print(f\PYZdq{}S matrix error \PYZob{}Sint[1]\PYZcb{}\PYZdq{})}
+    \PY{k}{return} \PY{n}{S\PYZus{}matrix}
+
+\PY{k}{def} \PY{n+nf}{J}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}  \PY{c+c1}{\PYZsh{}\PYZsh{}normalization part}
+    \PY{k}{def} \PY{n+nf}{interaction}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{x2}\PY{p}{,}\PY{n}{q}\PY{p}{,}\PY{n}{epsilon}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{V}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{q}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{x1}\PY{o}{\PYZhy{}}\PY{n}{x2}\PY{p}{)}\PY{o}{+}\PY{n}{epsilon}\PY{p}{)}
+        \PY{k}{return} \PY{n}{V}
+    \PY{k}{def} \PY{n+nf}{J\PYZus{}int\PYZus{}part}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{x2}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{basis\PYZus{}fun2}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{wave\PYZus{}fun}\PY{p}{(}\PY{n}{x2}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{n}{normalfactor}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{interaction}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{x2}\PY{p}{,}\PY{n}{q}\PY{p}{)}
+    \PY{n}{J\PYZus{}value} \PY{o}{=} \PY{n}{dblquad}\PY{p}{(}\PY{n}{J\PYZus{}int\PYZus{}part}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)}\PY{p}{,}\PY{n}{epsrel}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{)}
+   \PY{c+c1}{\PYZsh{}print(f\PYZdq{}J matrix error:\PYZob{}J\PYZus{}value[1]\PYZcb{}\PYZdq{})}
+    \PY{k}{return} \PY{n}{J\PYZus{}value}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+
+\PY{k}{def} \PY{n+nf}{h}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{potential}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{k}{def} \PY{n+nf}{Kphi}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{def} \PY{n+nf}{dbf}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{zeta} \PY{o}{=} \PY{l+m+mf}{2.0}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{2.0}\PY{o}{*}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}x = x.reshape((len(x),1))}
+            \PY{c+c1}{\PYZsh{}zeta = zeta.reshape((1,len(zeta)))}
+            \PY{n}{dchi} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{2.0}\PY{o}{*}\PY{n}{zeta}\PY{o}{+}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{zeta}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{zeta}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{l+m+mi}{4}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+            \PY{k}{return} \PY{n}{dchi}
+        \PY{k}{return} \PY{o}{\PYZhy{}}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{dbf}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{n}\PY{p}{)}                       \PY{c+c1}{\PYZsh{}derivative(fun,x1,dx=1e\PYZhy{}4,n=2,args=(n,))}
+    \PY{k}{def} \PY{n+nf}{h\PYZus{}int\PYZus{}part}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return}  \PY{n}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{a}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Kphi}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{o}{+}\PY{n}{potential}\PY{p}{(}\PY{n}{x1}\PY{p}{)}\PY{o}{*}\PY{n}{basis\PYZus{}fun}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{)}  \PY{c+c1}{\PYZsh{}\PYZsh{}2.0}
+    \PY{n}{h\PYZus{}value} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{h\PYZus{}value}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{=}\PY{n}{quad}\PY{p}{(}\PY{n}{h\PYZus{}int\PYZus{}part}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{,}\PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{n}{epsrel}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            
+ \PY{c+c1}{\PYZsh{}   print(f\PYZdq{}h matrix error \PYZob{}h\PYZus{}value[1]\PYZcb{}\PYZdq{})}
+    \PY{k}{return} \PY{n}{h\PYZus{}value}
+
+\PY{k}{def} \PY{n+nf}{F}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{    begin calculate F...}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{Fmatrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)} 
+    \PY{n}{J\PYZus{}value} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)} 
+    \PY{n}{h\PYZus{}value} \PY{o}{=} \PY{n}{h\PYZus{}matrix} 
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{        begin calculate J...}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{J\PYZus{}value}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{J}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)}
+            \PY{n}{Fmatrix}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{=}\PY{n}{J\PYZus{}value}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{+}\PY{n}{h\PYZus{}value}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{J}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+si}{\PYZob{}}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{=}\PY{l+s+si}{\PYZob{}}\PY{n}{J\PYZus{}value}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{J=}\PY{l+s+si}{\PYZob{}}\PY{n}{J\PYZus{}value}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fmatrix=}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+si}{\PYZob{}}\PY{n}{Fmatrix}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Fmatrix}\PY{p}{,}\PY{n}{h\PYZus{}value}
+
+
+
+\PY{k}{def} \PY{n+nf}{E}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{}c\PYZus{}new is a column vector}
+    \PY{c+c1}{\PYZsh{}print(c,np.sqrt(normalizationF2(c)))}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{begin calculate E}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{c} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}  \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}fix normalization for c}
+    \PY{n}{F\PYZus{}matrix}\PY{p}{,}\PY{n}{h\PYZus{}matrix} \PY{o}{=} \PY{n}{F}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)} 
+    \PY{n}{c}\PY{o}{=}\PY{n}{c}\PY{o}{*}\PY{n}{normalfactor}
+    \PY{n}{E} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{,}\PY{n}{F\PYZus{}matrix}\PY{p}{)}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{o}{+}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{)}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+    \PY{k}{return} \PY{n}{E}\PY{p}{,}\PY{n}{F\PYZus{}matrix}\PY{p}{,}\PY{n}{h\PYZus{}matrix}           
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{impliment-scf-method-to-calculate-ground-state-energy-and-wave-function}{%
+\subsection{3. impliment SCF method to calculate ground state energy and
+wave
+function}\label{impliment-scf-method-to-calculate-ground-state-energy-and-wave-function}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  initilization:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  E\_init=0
+\item
+  c\_init={[}\ldots1.0/np.sqrt(n)\ldots{]}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  calculate E outside the loop to get \textbf{E\_new}
+\item
+  In the same time, we can obtain \textbf{F matrix},\textbf{h matrix}
+  and \textbf{J matrix}.
+\item
+  start a loop if the energy difference between two nearest iterations
+  is large than a threshold (0.001)
+\item
+  save energy from previous iteration to E\_init
+\item
+  calculate \textbf{S matrix}
+\item
+  find the minimum eigenvalue and corresponding eigenvector.
+\item
+  the eigenvector is the \textbf{c\_new} for next iteration
+\item
+  calculate E using \textbf{c\_new}
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{HF}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{E\PYZus{}init}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}Hartree Fork\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{num}\PY{o}{=}\PY{l+m+mi}{1}
+    \PY{n}{c\PYZus{}init}\PY{o}{=}\PY{n}{n}\PY{o}{*}\PY{p}{[}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{]}
+    \PY{n}{S1}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{S}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)} \PY{c+c1}{\PYZsh{}4}
+    \PY{n}{h\PYZus{}matrix}\PY{o}{=}\PY{n}{h}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{begining........}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c\PYZus{}init=}\PY{l+s+si}{\PYZob{}}\PY{n}{c\PYZus{}init}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S\PYZus{}matrix=}\PY{l+s+si}{\PYZob{}}\PY{n}{S1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{h\PYZus{}matrix=}\PY{l+s+si}{\PYZob{}}\PY{n}{h\PYZus{}matrix}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}}\PY{l+s+si}{\PYZob{}}\PY{n}{num}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ iteration}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{normalfactor} \PY{o}{=} \PY{n}{normalizationF}\PY{p}{(}\PY{n}{c\PYZus{}init}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{normalfactor=}\PY{l+s+si}{\PYZob{}}\PY{n}{normalfactor}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{E\PYZus{}new}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{,}\PY{n}{hmatrix} \PY{o}{=} \PY{n}{E}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c\PYZus{}init}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)}  \PY{c+c1}{\PYZsh{}4}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E=}\PY{l+s+si}{\PYZob{}}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{E\PYZus{}vector} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{E\PYZus{}vector}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{k}{while}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if}\PY{p}{(}\PY{n}{n}\PY{o}{+}\PY{l+m+mi}{1}\PY{o}{\PYZgt{}}\PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{:}
+            \PY{k}{break}
+        \PY{n}{num}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{error: }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{n}{E\PYZus{}init} \PY{o}{=} \PY{n}{E\PYZus{}new}
+        \PY{n}{eigmatrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{inv}\PY{p}{(}\PY{n}{S1}\PY{p}{)}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{)}
+        \PY{p}{[}\PY{n}{value}\PY{p}{,}\PY{n}{vector}\PY{p}{]}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{eig}\PY{p}{(}\PY{n}{eigmatrix}\PY{p}{)}
+        \PY{n}{minindex} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{value} \PY{o}{==} \PY{n}{np}\PY{o}{.} \PY{n}{amin}\PY{p}{(}\PY{n}{value}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}               \PY{c+c1}{\PYZsh{}min}
+        \PY{c+c1}{\PYZsh{}print(f\PYZdq{}min eigenvalue=\PYZob{}value[minindex]\PYZcb{}\PYZdq{})}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}}\PY{l+s+si}{\PYZob{}}\PY{n}{num}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ iteration}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{c} \PY{o}{=} \PY{n}{vector}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{minindex}\PY{p}{]}
+        \PY{n}{normalfactor} \PY{o}{=} \PY{n}{normalizationF}\PY{p}{(}\PY{n}{c}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{normalfactor=}\PY{l+s+si}{\PYZob{}}\PY{n}{normalfactor}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{E\PYZus{}new}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{,}\PY{n}{hmatrix} \PY{o}{=} \PY{n}{E}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{h\PYZus{}matrix}\PY{p}{,}\PY{n}{normalfactor}\PY{p}{,}\PY{n}{q}\PY{p}{)} \PY{c+c1}{\PYZsh{}4}
+        \PY{n}{E\PYZus{}vector}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E=}\PY{l+s+si}{\PYZob{}}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c=}\PY{l+s+si}{\PYZob{}}\PY{n}{c}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{k}{if}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{error: }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{E\PYZus{}vector}\PY{p}{,} \PY{n}{c}
+        \PY{c+c1}{\PYZsh{}return E\PYZus{}vector}
+    
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{E\PYZus{}vector}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{n}{HF}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,}\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+-----------Hartree Fork--------------
+
+begining{\ldots}
+c\_init=[0.5, 0.5, 0.5, 0.5]
+S\_matrix=[[1.      0.93061 0.86334 0.81329]
+ [0.93061 1.      0.984   0.95735]
+ [0.86334 0.984   1.      0.99298]
+ [0.81329 0.95735 0.99298 1.     ]]
+h\_matrix=[[1.06250045 0.55254679 0.37771136 0.29227561]
+ [0.55254656 0.52083338 0.47662253 0.44277345]
+ [0.37771105 0.47662249 0.51249998 0.5275218 ]
+ [0.29227559 0.44277328 0.52752171 0.5803575 ]]
+\#1 iteration
+normalfactor=0.5149729749565125
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=2.45105
+J12=2.19342
+J13=2.01075
+J14=1.88325
+J21=2.19342
+J22=2.14725
+J23=2.03465
+J24=1.93908
+J31=2.01075
+J32=2.03465
+J33=1.95829
+J34=1.88370
+J41=1.88325
+J42=1.93908
+J43=1.88370
+J44=1.82275
+J=[[2.45105368 2.19342019 2.01074861 1.88325165]
+ [2.19342019 2.14725016 2.03464727 1.93908305]
+ [2.01074861 2.03464727 1.9582879  1.88370382]
+ [1.88325165 1.93908305 1.88370382 1.82274634]]
+Fmatrix=
+[[3.51355413 2.74596698 2.38845997 2.17552726]
+ [2.74596674 2.66808354 2.5112698  2.3818565 ]
+ [2.38845966 2.51126976 2.47078788 2.41122562]
+ [2.17552724 2.38185633 2.41122553 2.40310384]]
+E=3.20221
+error: 3.20221
+\#2 iteration
+normalfactor=3.611265360677167
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.56539
+J12=1.45918
+J13=1.35373
+J14=1.27515
+J21=1.45918
+J22=1.55770
+J23=1.52183
+J24=1.47321
+J31=1.35373
+J32=1.52183
+J33=1.52382
+J34=1.49656
+J41=1.27515
+J42=1.47321
+J43=1.49656
+J44=1.48302
+J=[[1.56538543 1.45918236 1.35373066 1.27514654]
+ [1.45918236 1.55769702 1.52182594 1.47320633]
+ [1.35373066 1.52182594 1.52382311 1.49655958]
+ [1.27514654 1.47320633 1.49655958 1.48301676]]
+Fmatrix=
+[[2.62788588 2.01172915 1.73144202 1.56742215]
+ [2.01172891 2.0785304  1.99844847 1.91597978]
+ [1.7314417  1.99844843 2.03632309 2.02408138]
+ [1.56742214 1.91597961 2.02408129 2.06337426]]
+E=2.99010
+c=[-0.00138998 -0.51558393  0.85299648 -0.08104491]
+error: 0.2121
+\#3 iteration
+normalfactor=1.049661647156174
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=2.19752
+J12=1.99008
+J13=1.83050
+J14=1.71717
+J21=1.99008
+J22=1.99438
+J23=1.90457
+J24=1.82221
+J31=1.83050
+J32=1.90457
+J33=1.85110
+J34=1.78954
+J41=1.71717
+J42=1.82221
+J43=1.78954
+J44=1.74143
+J=[[2.19752438 1.99008275 1.83050139 1.71716501]
+ [1.99008275 1.99438242 1.90457089 1.82221247]
+ [1.83050139 1.90457089 1.85109642 1.78953525]
+ [1.71716501 1.82221247 1.78953525 1.7414251 ]]
+Fmatrix=
+[[3.26002483 2.54262953 2.20821276 2.00944062]
+ [2.5426293  2.5152158  2.38119342 2.26498592]
+ [2.20821244 2.38119338 2.3635964  2.31705704]
+ [2.00944061 2.26498575 2.31705695 2.32178259]]
+E=2.88648
+c=[ 0.05225085 -0.06502007  0.99620147 -0.02499723]
+error: 0.10362
+\#4 iteration
+normalfactor=2.8967816469854664
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.74588
+J12=1.61180
+J13=1.49105
+J14=1.40257
+J21=1.61180
+J22=1.68484
+J23=1.63372
+J24=1.57544
+J31=1.49105
+J32=1.63372
+J33=1.61997
+J34=1.58284
+J41=1.40257
+J42=1.57544
+J43=1.58284
+J44=1.55932
+J=[[1.7458772  1.61180013 1.49104658 1.4025662 ]
+ [1.61180013 1.6848428  1.63371688 1.57543617]
+ [1.49104658 1.63371688 1.61996739 1.58283799]
+ [1.4025662  1.57543617 1.58283799 1.55931965]]
+Fmatrix=
+[[2.80837765 2.16434692 1.86875794 1.69484181]
+ [2.16434668 2.20567618 2.11033941 2.01820961]
+ [1.86875763 2.11033937 2.13246737 2.11035979]
+ [1.69484179 2.01820944 2.11035969 2.13967714]]
+E=2.84541
+c=[ 0.00726885 -0.47952588  0.87451433 -0.07229647]
+error: 0.04107
+\#5 iteration
+normalfactor=1.4882955357625265
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=2.08379
+J12=1.89580
+J13=1.74614
+J14=1.63909
+J21=1.89580
+J22=1.91878
+J23=1.83886
+J24=1.76254
+J31=1.74614
+J32=1.83886
+J33=1.79548
+J34=1.74001
+J41=1.63909
+J42=1.76254
+J43=1.74001
+J44=1.69800
+J=[[2.08378657 1.89579854 1.74614175 1.63909039]
+ [1.89579854 1.91878038 1.83885748 1.76253938]
+ [1.74614175 1.83885748 1.7954843  1.74001075]
+ [1.63909039 1.76253938 1.74001075 1.69799777]]
+Fmatrix=
+[[3.14628702 2.44834533 2.12385312 1.931366  ]
+ [2.44834509 2.43961376 2.31548    2.20531283]
+ [2.1238528  2.31547997 2.30798429 2.26753255]
+ [1.93136599 2.20531266 2.26753246 2.27835526]]
+E=2.81994
+c=[ 0.02512204 -0.2642888   0.96263616 -0.05340349]
+error: 0.02547
+\#6 iteration
+normalfactor=2.5234694445765338
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.83473
+J12=1.68690
+J13=1.55861
+J14=1.46526
+J21=1.68690
+J22=1.74739
+J23=1.68876
+J24=1.62573
+J31=1.55861
+J32=1.68876
+J33=1.66727
+J34=1.62529
+J41=1.46526
+J42=1.62573
+J43=1.62529
+J44=1.59687
+J=[[1.83472689 1.68690211 1.55861371 1.46526189]
+ [1.68690211 1.74739269 1.68876332 1.62573132]
+ [1.55861371 1.68876332 1.66727219 1.62529248]
+ [1.46526189 1.62573132 1.62529248 1.59687055]]
+Fmatrix=
+[[2.89722734 2.2394489  1.93632507 1.7575375 ]
+ [2.23944866 2.26822607 2.16538584 2.06850477]
+ [1.93632476 2.16538581 2.17977217 2.15281428]
+ [1.75753749 2.0685046  2.15281419 2.17722804]]
+E=2.80776
+c=[ 0.00934713 -0.44724421  0.89164503 -0.0696734 ]
+error: 0.01218
+\#7 iteration
+normalfactor=1.7406158398475522
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=2.02235
+J12=1.84453
+J13=1.70019
+J14=1.59652
+J21=1.84453
+J22=1.87714
+J23=1.80251
+J24=1.72946
+J31=1.70019
+J32=1.80251
+J33=1.76456
+J34=1.71240
+J41=1.59652
+J42=1.72946
+J43=1.71240
+J44=1.67371
+J=[[2.022352   1.84453291 1.70018658 1.59652144]
+ [1.84453291 1.8771386  1.8025091  1.7294627 ]
+ [1.70018658 1.8025091  1.76456169 1.71239989]
+ [1.59652144 1.7294627  1.71239989 1.67371431]]
+Fmatrix=
+[[3.08485245 2.3970797  2.07789794 1.88879706]
+ [2.39707947 2.39797198 2.27913163 2.17223614]
+ [2.07789763 2.27913159 2.27706167 2.23992169]
+ [1.88879704 2.17223598 2.23992159 2.2540718 ]]
+E=2.80039
+c=[ 0.01849196 -0.33021693  0.9417884  -0.06041056]
+error: 0.00737
+\#8 iteration
+normalfactor=2.323203977868576
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.88248
+J12=1.72716
+J13=1.59480
+J14=1.49883
+J21=1.72716
+J22=1.78075
+J23=1.71807
+J24=1.65248
+J31=1.59480
+J32=1.71807
+J33=1.69240
+J34=1.64782
+J41=1.49883
+J42=1.65248
+J43=1.64782
+J44=1.61678
+J=[[1.88247941 1.72715752 1.59480298 1.49883003]
+ [1.72715752 1.78074656 1.71806692 1.65248346]
+ [1.59480298 1.71806692 1.69240283 1.64782311]
+ [1.49883003 1.65248346 1.64782311 1.61677604]]
+Fmatrix=
+[[2.94497986 2.27970431 1.97251435 1.79110564]
+ [2.27970407 2.30157994 2.19468945 2.0952569 ]
+ [1.97251403 2.19468942 2.20490281 2.17534491]
+ [1.79110563 2.09525674 2.17534482 2.19713353]]
+E=2.79652
+c=[ 0.01078268 -0.42518983  0.90247258 -0.06812191]
+error: 0.00387
+\#9 iteration
+normalfactor=1.8833853746871307
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.98791
+J12=1.81571
+J13=1.67433
+J14=1.57256
+J21=1.81571
+J22=1.85360
+J23=1.78192
+J24=1.71071
+J31=1.67433
+J32=1.78192
+J33=1.74701
+J34=1.69671
+J41=1.57256
+J42=1.71071
+J43=1.69671
+J44=1.65990
+J=[[1.98791097 1.81571142 1.67432996 1.57256104]
+ [1.81571142 1.85359774 1.78192333 1.7107129 ]
+ [1.67432996 1.78192333 1.74700923 1.69670932]
+ [1.57256104 1.7107129  1.69670932 1.65989698]]
+Fmatrix=
+[[3.05041142 2.36825821 2.05204132 1.86483665]
+ [2.36825797 2.37443112 2.25854585 2.15348634]
+ [2.05204101 2.25854582 2.25950921 2.22423112]
+ [1.86483663 2.15348618 2.22423103 2.24025447]]
+E=2.79427
+c=[ 0.01588626 -0.35922809  0.9309821  -0.0630487 ]
+error: 0.00225
+\#10 iteration
+normalfactor=2.212452826837333
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.90895
+J12=1.74944
+J13=1.61482
+J14=1.51740
+J21=1.74944
+J22=1.79915
+J23=1.73421
+J24=1.66722
+J31=1.61482
+J32=1.73421
+J33=1.70623
+J34=1.66021
+J41=1.51740
+J42=1.66722
+J43=1.66021
+J44=1.62771
+J=[[1.9089528  1.74943665 1.61482212 1.51739502]
+ [1.74943665 1.79914516 1.73421398 1.66721674]
+ [1.61482212 1.73421398 1.70623213 1.66021337]
+ [1.51739502 1.66721674 1.66021337 1.62771453]]
+Fmatrix=
+[[2.97145325 2.30198344 1.99253349 1.80967063]
+ [2.30198321 2.31997854 2.2108365  2.10999018]
+ [1.99253317 2.21083647 2.21873211 2.18773517]
+ [1.80967061 2.10999002 2.18773507 2.20807203]]
+E=2.79301
+c=[ 0.0117641  -0.41117086  0.9090072  -0.067127  ]
+error: 0.00125
+\#11 iteration
+normalfactor=1.9643674495318786
+begin calculate E
+    begin calculate F{\ldots}
+        begin calculate J{\ldots}
+J11=1.96843
+J12=1.79939
+J13=1.65968
+J14=1.55898
+J21=1.79939
+J22=1.84023
+J23=1.77022
+J24=1.70005
+J31=1.65968
+J32=1.77022
+J33=1.73702
+J34=1.68777
+J41=1.55898
+J42=1.70005
+J43=1.68777
+J44=1.65202
+J=[[1.96843309 1.79938754 1.6596792  1.55898202]
+ [1.79938754 1.8402261  1.77021915 1.70004754]
+ [1.6596792  1.77021915 1.73701792 1.68777253]
+ [1.55898202 1.70004754 1.68777253 1.65202187]]
+Fmatrix=
+[[3.03093355 2.35193432 2.03739057 1.85125764]
+ [2.35193409 2.36105948 2.24684167 2.14282099]
+ [2.03739025 2.24684164 2.2495179  2.21529432]
+ [1.85125762 2.14282082 2.21529423 2.23237937]]
+E=2.79232
+c=[ 0.01466329 -0.37370986  0.92520058 -0.06426368]
+error: 0.0007
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{len}\PY{p}{(}\PY{n}{c}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+4
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{108}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mf}{0.01}\PY{p}{)}
+\PY{k}{def}
+\PY{n+nf}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{wave\PYZus{}fun}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{108}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+[<matplotlib.lines.Line2D at 0x1b57db6dc50>]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{n}\PY{o}{=}\PY{l+m+mi}{3}
+\PY{n}{q}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{n}{c\PYZus{}init}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.5}\PY{p}{]}\PY{o}{*}\PY{n}{n}
+\PY{n}{E\PYZus{}init}\PY{o}{=}\PY{l+m+mi}{0}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}Hartree Fork\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{num}\PY{o}{=}\PY{l+m+mi}{1}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}}\PY{l+s+si}{\PYZob{}}\PY{n}{num}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ iteration}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{E\PYZus{}new}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{,}\PY{n}{hmatrix} \PY{o}{=} \PY{n}{E}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c\PYZus{}init}\PY{p}{,}\PY{n}{q}\PY{p}{)}  \PY{c+c1}{\PYZsh{}4}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E=}\PY{l+s+si}{\PYZob{}}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c=}\PY{l+s+si}{\PYZob{}}\PY{n}{c}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{E\PYZus{}vector} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{E\PYZus{}vector}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{k}{while}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if}\PY{p}{(}\PY{n}{n}\PY{o}{+}\PY{l+m+mi}{1}\PY{o}{\PYZgt{}}\PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{:}
+        \PY{k}{break}
+    \PY{n}{num}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{error: }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}}\PY{l+s+si}{\PYZob{}}\PY{n}{num}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ iteration}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{E\PYZus{}init} \PY{o}{=} \PY{n}{E\PYZus{}new}
+    \PY{n}{S1}\PY{o}{=}\PY{n}{S}\PY{p}{(}\PY{n}{n}\PY{p}{)} \PY{c+c1}{\PYZsh{}4}
+    \PY{n}{eigmatrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{inv}\PY{p}{(}\PY{n}{S1}\PY{p}{)}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{)}
+    \PY{p}{[}\PY{n}{value}\PY{p}{,}\PY{n}{vector}\PY{p}{]}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{eig}\PY{p}{(}\PY{n}{eigmatrix}\PY{p}{)}
+    \PY{n}{minindex} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{value} \PY{o}{==} \PY{n}{np}\PY{o}{.} \PY{n}{amin}\PY{p}{(}\PY{n}{value}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{c} \PY{o}{=} \PY{n}{vector}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{minindex}\PY{p}{]}
+    \PY{n}{E\PYZus{}new}\PY{p}{,}\PY{n}{Fmatrix}\PY{p}{,}\PY{n}{hmatrix}\PY{o}{=}\PY{n}{E}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{c}\PY{p}{,}\PY{n}{q}\PY{p}{)} \PY{c+c1}{\PYZsh{}4}
+    \PY{n}{E\PYZus{}vector}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E=}\PY{l+s+si}{\PYZob{}}\PY{n}{E\PYZus{}new}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c=}\PY{l+s+si}{\PYZob{}}\PY{n}{c}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{if}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{error: }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}new}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{float}\PY{p}{(}\PY{n}{E\PYZus{}init}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+-----------Hartree Fork--------------
+
+\#1 iteration
+Fmatrix=
+[[1.06250006 0.55254673 0.37771136]
+ [0.55254667 0.52083338 0.47662253]
+ [0.37771115 0.47662244 0.51250008]]
+E=2.45480
+c=[-0.13997659  0.99015481]
+error: 2.4548
+\#2 iteration
+Fmatrix=
+[[1.06250006 0.55254673 0.37771136]
+ [0.55254667 0.52083338 0.47662253]
+ [0.37771115 0.47662244 0.51250008]]
+E=1.87865
+c=[-0.04114338  0.70528105  0.7077329 ]
+error: 0.57615
+\#3 iteration
+Fmatrix=
+[[1.06250006 0.55254673 0.37771136]
+ [0.55254667 0.52083338 0.47662253]
+ [0.37771115 0.47662244 0.51250008]]
+E=1.87865
+c=[-0.04114338  0.70528105  0.7077329 ]
+error: 0.0
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{82}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{E\PYZus{}vector}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{n}{E\PYZus{}vector}\PY{p}{)}
+\PY{n}{E\PYZus{}vector}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}17608\textbackslash{}AppData\textbackslash{}Local\textbackslash{}conda\textbackslash{}conda\textbackslash{}envs\textbackslash{}distortion\textbackslash{}lib\textbackslash{}site-
+packages\textbackslash{}numpy\textbackslash{}core\textbackslash{}\_asarray.py:171: VisibleDeprecationWarning: Creating an
+ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-
+tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant
+to do this, you must specify 'dtype=object' when creating the ndarray.
+  return array(a, dtype, copy=False, order=order, subok=True)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{82}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+[array([[3.74802744]]),
+ 0.5159238383293452,
+ 1.7370035634665517,
+ 0.9059561437284827,
+ 1.3118298101827137,
+ 1.0687412025420044,
+ 1.199716093810561,
+ 1.1246737234795003,
+ 1.1662441295266188,
+ 1.1427710773101618,
+ 1.155884842020896,
+ 1.1485144573398114,
+ 1.1526429840273433,
+ 1.1503260237120296,
+ 1.1516249464807315,
+ 1.150896319166262]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{a}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\PY{n}{b}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{a}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([[1],
+       [2]])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{value} \PY{o}{==} \PY{n}{np}\PY{o}{.} \PY{n}{amin}\PY{p}{(}\PY{n}{value}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+2
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
